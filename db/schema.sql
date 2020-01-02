@@ -1,45 +1,34 @@
--- Table 'Questions'
+DROP TABLE Questions;
+DROP TABLE Answers;
+DROP TABLE Photos;
 
-CREATE TABLE IF NOT EXISTS `Questions` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT DEFAULT NULL,
-  `product_id` INTEGER NOT NULL DEFAULT NULL,
-  `asker_name` VARCHAR(40) NOT NULL DEFAULT 'NULL',
-  `body` VARCHAR(255) NULL DEFAULT NULL,
-  `date` DATETIME NULL DEFAULT NULL,
-  `helpful` SMALLINT NULL DEFAULT NULL,
-  `reported` TINYINT(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+-- Table 'Questions'
+CREATE TABLE IF NOT EXISTS Questions (
+  id SERIAL PRIMARY KEY,
+  product_id INT,
+  asker_name VARCHAR(40),
+  body VARCHAR(255),
+  date DATE,
+  helpful SMALLINT,
+  reported SMALLINT
 );
 
 -- Table 'Answers'
 		
-CREATE TABLE IF NOT EXISTS `Answers` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `question_id` INTEGER NOT NULL DEFAULT NULL,
-  `answer_name` VARCHAR(40) NULL DEFAULT NULL,
-  `body` VARCHAR(255) NOT NULL DEFAULT 'NULL',
-  `date` DATETIME NULL DEFAULT NULL,
-  `helpful` SMALLINT NULL DEFAULT NULL,
-  `reported` TINYINT(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE IF NOT EXISTS Answers (
+  id SERIAL PRIMARY KEY,
+  question_id INT REFERENCES Questions(id),
+  answer_name VARCHAR(40),
+  body VARCHAR(255),
+  date DATE,
+  helpful SMALLINT,
+  reported SMALLINT
 );
 
 -- Table 'Photos'
 		
-CREATE TABLE IF NOT EXISTS `Photos` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `answer_id` INTEGER NOT NULL DEFAULT NULL,
-  `url` VARCHAR(2047) NOT NULL DEFAULT 'NULL',
-  PRIMARY KEY (`id`)
+CREATE TABLE IF NOT EXISTS Photos (
+  id SERIAL PRIMARY KEY,
+  answer_id INT REFERENCES Answers(id),
+  url VARCHAR(2047)
 );
-
--- Foreign Keys 
-
-ALTER TABLE `Answers` ADD FOREIGN KEY (question_id) REFERENCES `Questions` (`id`);
-ALTER TABLE `Photos` ADD FOREIGN KEY (answer_id) REFERENCES `Answers` (`id`);
-
--- Table Properties
-
-ALTER TABLE `Questions` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-ALTER TABLE `Answers` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-ALTER TABLE `Photos` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
