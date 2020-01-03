@@ -1,6 +1,5 @@
-DROP TABLE Questions;
-DROP TABLE Answers;
-DROP TABLE Photos;
+CREATE DATABASE kartify;
+\c kartify
 
 -- Table 'Questions'
 CREATE TABLE IF NOT EXISTS Questions (

@@ -1,7 +1,7 @@
 {
   "name": "kartify-api-questions",
   "version": "1.0.0",
-  "description": "",
+  "description": "Questions API for kartify app",
   "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

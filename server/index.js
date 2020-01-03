@@ -1,7 +1,20 @@
+const { Client } = require('pg');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const db = require('../db/index.js');
+// const db = require('../db/index.js');
+
+// Database
+const db = new Client();
+setTimeout(() => {
+  db.connect(e => {
+    if (e) {
+      console.error(e);
+    } else {
+      console.log('Connected to PostgreSQL server!');
+    }
+  })
+}, 5000);
 
 const app = express();
 
@@ -9,12 +22,24 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-app.get('/', () => console.log('jared'))
+app.get('/', () => console.log('rebuilt'))
+
 app.get('/test', (req, res) => {
-  res.status(200).json({test: 'hello world'})
+  const query = {
+    text: 'INSERT INTO questions(product_id, asker_name, body, date, helpful) VALUES($1, $2, $3, $4, $5)',
+    values: ['4', 'Sebastian', 'You like it?', '12/5/2008', '8'] 
+  }
+
+  db.query(query)
+  .then((data) => {
+    console.log(data);
+    res.status(200).json(data);
+  })
+  .catch(e => {
+    console.error(e);
+    res.sendStatus(404);
+  })
 })
 
 const port = 80;
-app.listen(port, () => {
-  console.log(`Web server listening on port ${port}`);
-});
+app.listen(port, () => console.log(`Web server listening on port ${port}`));

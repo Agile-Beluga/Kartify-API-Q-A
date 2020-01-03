@@ -1,18 +1,13 @@
-const { Client } = require('pg');
+// const { Client } = require('pg');
 
-const client = new Client({
-  host: 'localhost',
-  user: 'sebastian',
-  database: 'kartify',
-  port: 5432,
-});
+// const client = new Client();
 
-client.connect(error => {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('Connected to PostgreSQL server');
-  }
-});
+// client.connect(error => {
+//   if (error) {
+//     console.error(error);
+//   } else {
+//     console.log('Connected to PostgreSQL server');
+//   }
+// });
 
-module.exports = client;
+// module.exports = client;
