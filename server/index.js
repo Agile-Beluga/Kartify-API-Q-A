@@ -2,7 +2,6 @@ const { Client } = require('pg');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-// const db = require('../db/index.js');
 
 // Database
 const db = new Client();
@@ -14,7 +13,8 @@ setTimeout(() => {
       console.log('Connected to PostgreSQL server!');
     }
   })
-}, 5000);
+}, 6000);
+
 
 const app = express();
 

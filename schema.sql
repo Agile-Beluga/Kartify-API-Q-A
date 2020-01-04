@@ -31,3 +31,6 @@ CREATE TABLE IF NOT EXISTS Photos (
   answer_id INT REFERENCES Answers(id),
   url VARCHAR(2047)
 );
+
+CREATE USER sebastian;
+SET ROLE sebastian;
