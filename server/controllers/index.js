@@ -4,30 +4,46 @@ module.exports = {
   questions: {
     get: (req, res) => {
       const id = req.params.product_id;
-      let response = {
+      const count = req.query.count ? Math.floor(req.query.count) : 5;
+      const page = req.query.page ? Math.floor(req.query.page) : 1;
+      const response = {
         product_id: id,
         results: []
       };
 
       models.questions.findAll(id)
       .then(({rows:questions}) => {
-        response.results = questions;
+
         if (questions.length === 0) {
           res.json(response);
         }
-      
+         
+        const start = count * (page - 1);
+        const end = start + count > questions.length ? questions.length : start + count;
+        const totalQuestions = end - start;
+        
+        if (totalQuestions <= 0 || start < 0) {
+          res.sendStatus(404);
+        }
+        
         let questionsDone = 0;
         let totalAnswers = 0;
         let answersDone = 0;
-        for (let question of questions) {
+
+        for (let i = start; i < end; i++) {
+          let question = questions[i];
           question.answers = {};
+          response.results.push(question);
+
           models.answers.findAllAnswers(question.question_id)
           .then(({rows:answers}) => {
             questionsDone += 1;
-            totalAnswers += answers.length;
-            if (questionsDone === questions.length && totalAnswers === 0) {
+            totalAnswers += answers.length; 
+
+            if (questionsDone === totalQuestions && totalAnswers === 0) {
               res.json(response);
             }
+
             for (let answer of answers) {
               question.answers[answer.id] = answer;
               question.answers[answer.id].photos = [];
@@ -37,7 +53,7 @@ module.exports = {
                 for (let photo of photos) {
                   answer.photos.push(photo.url);
                 }
-                if (answersDone === totalAnswers && questionsDone === questions.length) {
+                if (answersDone === totalAnswers && questionsDone === totalQuestions) {
                   res.json(response);
                 } 
               })
