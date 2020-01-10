@@ -35,7 +35,7 @@ module.exports = {
   },
 
   answers: {
-    findAllAnswers: (questionId) => {
+    findAll: (questionId) => {
       return db.query(`
         SELECT id, body, date, answerer_name, helpfulness 
         FROM answers 

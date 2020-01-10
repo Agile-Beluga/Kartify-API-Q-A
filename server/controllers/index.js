@@ -23,7 +23,7 @@ module.exports = {
         const totalQuestions = end - start;
         
         if (totalQuestions <= 0 || start < 0) {
-          res.sendStatus(404);
+          res.json(response);
         }
         
         let questionsDone = 0;
@@ -35,7 +35,7 @@ module.exports = {
           question.answers = {};
           response.results.push(question);
 
-          models.answers.findAllAnswers(question.question_id)
+          models.answers.findAll(question.question_id)
           .then(({rows:answers}) => {
             questionsDone += 1;
             totalAnswers += answers.length; 
@@ -112,18 +112,29 @@ module.exports = {
   answers: {
     get: (req, res) => {
       const id = req.params.question_id;
+      const count = req.query.count ? Math.floor(req.query.count) : 5;
+      const page = req.query.page ? Math.floor(req.query.page) : 1;
+
       const response = {
         question: id,
-        page: 0,
-        count: 0,
+        page: page,
+        count: count,
         results: []
       };
-      models.answers.findAllAnswers(id)
-      .then(({rows:answers}) => {
-        response.count = answers.length;
 
-        for (let answer of answers) {
-          answer['answer_id'] = answer.id;
+      models.answers.findAll(id)
+      .then(({rows:answers}) => {
+        const start = count * (page - 1);
+        const end = start + count > answers.length ? answers.length : start + count;
+
+        if (answers.length === 0 || start < 0) {
+          res.json(response);
+        }
+
+        for (let i = start; i < end; i++) {
+          let answer = answers[i];
+          answer.answer_id = answer.id;
+          answer.photos = [];
           delete answer.id;
           response.results.push(answer);
         }

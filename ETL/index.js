@@ -189,3 +189,10 @@ const formatData = (data, table) => {
   // }
   return data;
 };
+
+const trimData = (table, column) => {
+  return db.query(`
+    UPDATE ${table}
+    SET ${column} = TRIM (both '"' FROM ${column})
+  `);
+}
