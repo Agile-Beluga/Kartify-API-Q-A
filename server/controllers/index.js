@@ -87,6 +87,19 @@ module.exports = {
         console.error(e);
       });
     },
+    postTest: (req, res) => {
+      const id = req.params['product_id'];
+      const question = req.body;
+
+      models.questions.addTest(id, question)
+      .then(() => {
+        res.sendStatus(201);
+      })
+      .catch(e =>{
+        res.sendStatus(500);
+        console.error(e);
+      });
+    },
     putHelpful: (req, res) => {
       const id = parseInt(req.params.question_id);
 

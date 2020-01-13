@@ -1,0 +1,4 @@
+/ETL/LegacyData
+package-lock.json
+/node_modules
+kartify_backup.sql

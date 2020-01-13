@@ -1,7 +1,53 @@
 const db = require('../../db/index.js');
 
+// const query = async (text, values, cb) => {
+//   const client = await db.connect();
+//   client.query(text, values) 
+  
+// }
+  
+//   db.connect((err, client, release) => {
+//     if (err) {
+//       return err;
+//     } 
+//     return client.query(text, values)
+//     .then()
+//     .catch()
+//     .finally(() => release())
+//      (err, result) => {
+//       release()
+//       if (err) {
+//         return console.error('Error executing query', err.stack)
+//       }
+//       console.log(result.rows)
+//     })
+//   })
+  
+// };
+
 module.exports = {
   questions: {
+    findAllPool: (productId) => {
+      // return db.connect()
+      //   .then(client => client.query(`
+      //   SELECT question_id, question_body, question_date, asker_name, question_helpfulness, reported
+      //   FROM questions 
+      //   WHERE (product_id = ${productId} AND reported = 0)
+      //   `));
+      // const text = '';
+      // const values = '';
+      
+      // db.connect()
+      // .then(client => client.query(text, values))
+      // .then(res => {
+      //   client.release();
+      //   cb(null, res);
+      // })
+      // .catch(err => {
+      //   client.release();
+      //   cb(null, res);
+      // })
+    },
     findAll: (productId) => {
       return db.query(`
         SELECT question_id, question_body, question_date, asker_name, question_helpfulness, reported
@@ -17,6 +63,21 @@ module.exports = {
         VALUES($1, $2, $3, $4)`;
       
       return db.query(query, values);
+    },
+    addTest: (productId, question) => {
+      const columns = 'product_id, asker_name, asker_email, question_body';
+      const values = [productId, question.name, question.email, question.body];
+      const query = `
+        INSERT INTO questions(${columns}) 
+        VALUES($1, $2, $3, $4)`;
+      
+      return (
+        db.connect()
+        .then(client => {
+          client.query(query, values)
+          .then(() => client.release())
+        }));
+      ;
     },
     markAsHelpful: (questionId) => {
       return db.query( `

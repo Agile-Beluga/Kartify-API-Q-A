@@ -1,38 +1,26 @@
 version: '3'
 
 services:
-  database:
-    image: postgres
-    container_name: pg_container
-    ports:
-      - '5432:5432'
-    volumes:
-      # - ./db/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
-      - $HOME/docker/volumes/postgres:/var/lib/postgresql/data
+  # database:
+  #   image: postgres
+  #   container_name: pg_container
+  #   ports:
+  #     - '5432:5432'
+  #   volumes:
+  #   - $HOME/docker/volumes/postgres/kartify:/var/lib/postgresql/data
 
   web:
-    build: .
+    image: scoronelhamilton/web-server:5
     container_name: web-server
     ports: 
-      - '80:80'
-    restart: on-failure
-    depends_on:
-     - database
-    # depends_on:
+      - '3000:80'
+    # restart: on-failure
+    # links:
     #   - database
     environment:
-      # - PGPASSWORD=password
       - PGUSER=postgres
+      - PGPASSWORD=kartify
       - PGDATABASE=kartify
-      - PGHOST=database
+      - PGHOST=3.90.7.137
       - PGPORT=5432
-
-
-   
-
-
-  
-
-
-  
 

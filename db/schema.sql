@@ -1,23 +1,20 @@
 CREATE DATABASE kartify;
 \c kartify
 
--- Table 'Questions'
-
 CREATE TABLE IF NOT EXISTS questions (
   question_id SERIAL PRIMARY KEY,
-  asker_name VARCHAR(40),
-  asker_email VARCHAR(40),
-  question_body VARCHAR(255),
+  product_id INT NOT NULL,
+  asker_name VARCHAR(40) NOT NULL,
+  asker_email VARCHAR(40) NOT NULL,
+  question_body VARCHAR(255) NOT NULL,
   question_date DATE DEFAULT CURRENT_DATE,
   helpful SMALLINT DEFAULT 0,
   reported SMALLINT DEFAULT 0
 );
 
--- Table 'Answers'
-
 CREATE TABLE IF NOT EXISTS answers (
   id SERIAL PRIMARY KEY,
-  question_id INT REFERENCES questions(id) NOT NULL,
+  question_id INT REFERENCES questions(question_id) NOT NULL,
   answerer_name VARCHAR(40) NOT NULL,
   answerer_email VARCHAR(40) NOT NULL,
   body VARCHAR(255) NOT NULL,
@@ -25,8 +22,6 @@ CREATE TABLE IF NOT EXISTS answers (
   helpful SMALLINT DEFAULT 0,
   reported SMALLINT DEFAULT 0
 );
-
--- Table 'Photos'
 		
 CREATE TABLE IF NOT EXISTS answers_photos (
   id SERIAL PRIMARY KEY,

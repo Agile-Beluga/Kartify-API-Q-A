@@ -1,4 +1,5 @@
 node_modules/
 ETL/LegacyData/
 package-lock.json
-agile_beluga_questions.pem
+docker-compose.yml
+kartify_backup.sql
